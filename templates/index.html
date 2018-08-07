@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+  </head>
+  <body>
+    <h1><b>Chatbot with Personality !!!</b></h1>
+    <h3>Chat with Chandler, a character from the Friends series</h3>
+    <div>
+      <div id="chatbox">
+        <p class="botText">	<img src="static/chandler.jpg" style="height:60px;margin-right:5px;border-radius:50%"><b><span>Hi! I'm Chandler.</b></span></p>
+      </div>
+      <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Message" style="inline-block:true;float:left" >
+        <input id="buttonInput" type="submit" value="Send">
+      </div>
+      <script>
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+          var userHtml = '<p class="userText"><b><span>' + rawText + '</span></b></p>';
+          $("#textInput").val("");
+          $("#chatbox").append(userHtml);
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText"><img src="static/chandler.jpg" style="height:60px;margin-right:5px;border-radius:50%"><b><span>' + data + '</span></b></p>';
+            $("#chatbox").append(botHtml);
+			responsiveVoice.speak(data,"UK English Male");
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+          getBotResponse();
+        })
+      </script>
+    </div>
+  </body>
+</html>
